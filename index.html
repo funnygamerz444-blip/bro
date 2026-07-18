@@ -24,7 +24,6 @@
             padding: 20px;
         }
 
-        /* Background Canvas for Matrix Rain */
         #matrixCanvas {
             position: fixed;
             top: 0;
@@ -124,7 +123,7 @@
             color: #ff0055;
         }
 
-        /* --- MAIN INTERFACE --- */
+        /* --- MAIN PANELS --- */
         .title {
             font-size: 2.2rem;
             font-weight: bold;
@@ -153,7 +152,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
             backdrop-filter: blur(5px);
             background-image: linear-gradient(rgba(0, 255, 0, 0.03) 50%, transparent 50%);
-            background-size: 100% 4px; /* Gives that hacker monitor line effect */
+            background-size: 100% 4px;
         }
 
         .profile-img {
@@ -169,23 +168,20 @@
         .name { font-size: 1.8rem; color: #0f0; margin-bottom: 10px; }
         .info { font-size: 1rem; color: #88ff88; margin: 5px 0; }
         .username { color: #00ffff; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 15px; }
-        
-        /* Music Style */
-        .audio-container {
-            margin-top: 35px;
-            z-index: 10;
-            text-align: center;
+
+        .status-text {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #0f0;
+            letter-spacing: 1px;
+            animation: blink 1.5s infinite;
         }
-        iframe {
-            border: 2px solid #0f0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
 
-    <!-- LOCK SCREEN LAYER -->
+    <!-- LOCK SCREEN OVERLAY -->
     <div id="lockScreen">
         <div class="lock-title">STEP 1: SUBSCRIBE TO UNLOCK</div>
         <a href="https://www.youtube.com/@LDR-YSN?sub_confirmation=1" target="_blank" class="sub-btn" onclick="enableKeypad()">🔴 SUBSCRIBE @LDR-YSN</a>
@@ -211,40 +207,38 @@
     <!-- BACKGROUND MATRIX RAIN -->
     <canvas id="matrixCanvas"></canvas>
 
-    <!-- MAIN INTERFACE -->
+    <!-- MAIN HACKER INTERFACE -->
     <div class="title">System Infiltrated</div>
     <div class="container">
-        <!-- Card 1: Yeasin (Joker Image) -->
+        <!-- Card 1: Yeasin -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=400" alt="Yeasin" class="profile-img">
+            <!-- ডিরেক্ট টিকটক সিডিএন ইমেজ লিংক ট্র্যাকিং মেথড -->
+            <img src="https://images.weserv.nl/?url=www.tiktok.com/api/v1/user/avatar/?user_id=yeasin_bhai_86&default=https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80" alt="Yeasin" class="profile-img">
             <h2 class="name">Yeasin</h2>
             <p class="info">Age: 15+</p>
-            <p class="info">From: Chittagong</p>
+            <p class="info">From: Chattogram</p>
             <a href="https://www.tiktok.com/@yeasin_bhai_86?_r=1&_t=ZS-987pcwSv5wz" target="_blank" class="username">@yeasin_bhai_86</a>
         </div>
 
-        <!-- Card 2: Tanjid (Punjabi Image Profile Setup) -->
+        <!-- Card 2: Tanjid -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?q=80&w=400" alt="Tanjid" class="profile-img">
+            <img src="https://images.weserv.nl/?url=www.tiktok.com/api/v1/user/avatar/?user_id=tamjidking86&default=https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?q=80" alt="Tanjid" class="profile-img">
             <h2 class="name">Tanjid</h2>
             <p class="info">Age: 13+</p>
-            <p class="info">From: Chittagong</p>
+            <p class="info">From: Chattogram</p>
             <a href="https://www.tiktok.com/@tamjidking86?_r=1&_t=ZS-987ph8xYgtx" target="_blank" class="username">@tamjidking86</a>
         </div>
     </div>
 
-    <!-- BACKGROUND MUSIC -->
-    <div class="audio-container" id="musicContainer">
-        <p style="font-size: 0.9rem; color: #0f0; margin-bottom: 8px;">⚡ HACKING SOUNDTRACK ⚡</p>
-        <iframe id="youtubeAudio" width="260" height="60" 
-            src="https://www.youtube.com/embed/Y8w-2lzM-C4?enablejsapi=1&version=3" 
-            title="Sci-Fi Background Music" frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;">
-        </iframe>
-    </div>
+    <div class="status-text">⚡ SYSTEM SOUNDTRACK ACTIVE: HackingYT.mp3 ⚡</div>
+
+    <!-- AUDIO CONFIGURATION FOR GITHUB USER DIRECTORY -->
+    <audio id="hackerAudio" loop preload="auto">
+        <source src="HackingYT.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // Matrix Canvas Effect
+        // Matrix Canvas Animation
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -264,7 +258,7 @@
         }
         setInterval(draw, 30);
 
-        // Security System Logic
+        // Security Core Logic
         let currentPin = "";
         const correctPin = "078686";
         let hasSubscribed = false;
@@ -283,12 +277,15 @@
                 document.getElementById('pinDisplay').innerText = "*".repeat(currentPin.length);
                 
                 if (currentPin === correctPin) {
-                    // Unlock screen
                     document.getElementById('lockScreen').style.display = 'none';
                     
-                    // Activate music player with autoplay configurations
-                    const iframe = document.getElementById('youtubeAudio');
-                    iframe.src = "https://www.youtube.com/embed/Y8w-2lzM-C4?autoplay=1&loop=1&playlist=Y8w-2lzM-C4";
+                    // User Interaction Triggered Audio Playback
+                    const audio = document.getElementById('hackerAudio');
+                    if (audio) {
+                        audio.play().catch(function(error) {
+                            console.log("Audio play blocked by browser policy: ", error);
+                        });
+                    }
                 } else if (currentPin.length === 6) {
                     setTimeout(() => {
                         alert("ACCESS DENIED: Wrong Password!");
