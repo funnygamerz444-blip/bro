@@ -24,7 +24,7 @@
             padding: 20px;
         }
 
-        /* Matrix Rain Canvas */
+        /* Background Canvas for Matrix Rain */
         #matrixCanvas {
             position: fixed;
             top: 0;
@@ -41,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.96);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -51,10 +51,11 @@
         }
 
         .lock-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 15px;
             text-align: center;
             text-shadow: 0 0 10px #0f0;
+            letter-spacing: 2px;
         }
 
         .sub-btn {
@@ -123,7 +124,7 @@
             color: #ff0055;
         }
 
-        /* --- MAIN CONTENT --- */
+        /* --- MAIN INTERFACE --- */
         .title {
             font-size: 2.2rem;
             font-weight: bold;
@@ -151,29 +152,34 @@
             text-align: center;
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
             backdrop-filter: blur(5px);
+            background-image: linear-gradient(rgba(0, 255, 0, 0.03) 50%, transparent 50%);
+            background-size: 100% 4px; /* Gives that hacker monitor line effect */
         }
 
         .profile-img {
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             border: 3px solid #0f0;
             margin: 0 auto 15px auto;
             object-fit: cover;
+            box-shadow: 0 0 15px #0f0;
         }
 
         .name { font-size: 1.8rem; color: #0f0; margin-bottom: 10px; }
         .info { font-size: 1rem; color: #88ff88; margin: 5px 0; }
         .username { color: #00ffff; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 15px; }
         
-        /* Music Container */
+        /* Music Style */
         .audio-container {
             margin-top: 35px;
             z-index: 10;
+            text-align: center;
         }
         iframe {
             border: 2px solid #0f0;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
     </style>
 </head>
@@ -208,30 +214,30 @@
     <!-- MAIN INTERFACE -->
     <div class="title">System Infiltrated</div>
     <div class="container">
-        <!-- Card 1: Yeasin -->
+        <!-- Card 1: Yeasin (Joker Image) -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400" alt="Yeasin" class="profile-img">
+            <img src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=400" alt="Yeasin" class="profile-img">
             <h2 class="name">Yeasin</h2>
             <p class="info">Age: 15+</p>
-            <p class="info">From: Chattogram</p>
+            <p class="info">From: Chittagong</p>
             <a href="https://www.tiktok.com/@yeasin_bhai_86?_r=1&_t=ZS-987pcwSv5wz" target="_blank" class="username">@yeasin_bhai_86</a>
         </div>
 
-        <!-- Card 2: Tanjid -->
+        <!-- Card 2: Tanjid (Punjabi Image Profile Setup) -->
         <div class="card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="Tanjid" class="profile-img">
+            <img src="https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?q=80&w=400" alt="Tanjid" class="profile-img">
             <h2 class="name">Tanjid</h2>
             <p class="info">Age: 13+</p>
-            <p class="info">From: Chattogram</p>
+            <p class="info">From: Chittagong</p>
             <a href="https://www.tiktok.com/@tamjidking86?_r=1&_t=ZS-987ph8xYgtx" target="_blank" class="username">@tamjidking86</a>
         </div>
     </div>
 
-    <!-- BACKGROUND YOUTUBE MUSIC -->
-    <div class="audio-container" id="musicContainer" style="display:none;">
-        <p style="font-size: 0.9rem; color: #0f0; margin-bottom: 8px;">⚡ HACKING SOUNDTRACK ACTIVE ⚡</p>
-        <iframe width="260" height="60" 
-            src="https://www.youtube.com/embed/Y8w-2lzM-C4?autoplay=1&loop=1&playlist=Y8w-2lzM-C4" 
+    <!-- BACKGROUND MUSIC -->
+    <div class="audio-container" id="musicContainer">
+        <p style="font-size: 0.9rem; color: #0f0; margin-bottom: 8px;">⚡ HACKING SOUNDTRACK ⚡</p>
+        <iframe id="youtubeAudio" width="260" height="60" 
+            src="https://www.youtube.com/embed/Y8w-2lzM-C4?enablejsapi=1&version=3" 
             title="Sci-Fi Background Music" frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;">
         </iframe>
@@ -258,7 +264,7 @@
         }
         setInterval(draw, 30);
 
-        // Security System
+        // Security System Logic
         let currentPin = "";
         const correctPin = "078686";
         let hasSubscribed = false;
@@ -277,8 +283,12 @@
                 document.getElementById('pinDisplay').innerText = "*".repeat(currentPin.length);
                 
                 if (currentPin === correctPin) {
+                    // Unlock screen
                     document.getElementById('lockScreen').style.display = 'none';
-                    document.getElementById('musicContainer').style.display = 'block';
+                    
+                    // Activate music player with autoplay configurations
+                    const iframe = document.getElementById('youtubeAudio');
+                    iframe.src = "https://www.youtube.com/embed/Y8w-2lzM-C4?autoplay=1&loop=1&playlist=Y8w-2lzM-C4";
                 } else if (currentPin.length === 6) {
                     setTimeout(() => {
                         alert("ACCESS DENIED: Wrong Password!");
