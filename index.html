@@ -2,62 +2,98 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>CYBER-TERMINAL V.2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Friends Info - Cyber Edition Pro</title>
     <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 20px; }
-        .hidden { display: none !important; }
-        .terminal-box { border: 1px solid #0f0; padding: 20px; background: rgba(0, 20, 0, 0.9); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 20px; }
-        .card { border: 1px solid #0f0; padding: 5px; text-align: center; font-size: 10px; }
-        .game-panel { border: 1px solid #ff0; padding: 15px; margin: 10px 0; color: #ff0; }
-        button { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; cursor: pointer; }
-        button:hover { background: #0f0; color: #000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: #000; 
+            color: #0f0; 
+            font-family: 'Courier New', Courier, monospace; 
+            text-align: center; 
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        #matrixCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.12; }
+        .content-wrapper { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .hidden-panel { display: none !important; }
+        .glitch-title { font-size: 35px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 10px #0f0; margin-bottom: 25px; }
+        #consoleLog { width: 100%; max-width: 450px; background: rgba(0, 15, 0, 0.85); border: 1px solid #0f0; padding: 10px; border-radius: 5px; margin-bottom: 25px; font-size: 13px; text-align: left; height: 80px; overflow-y: hidden; }
+        .btn-wrapper button { padding: 15px 45px; font-size: 20px; cursor: pointer; border-radius: 5px; border: 2px solid #0f0; background: transparent; color: #0f0; transition: 0.3s; }
+        .btn-wrapper button:hover { background: #0f0; color: #000; }
+        .container { display: flex; justify-content: center; gap: 35px; margin-top: 10px; flex-wrap: wrap; }
+        .card { background: rgba(10, 10, 10, 0.9); border: 2px solid #0f0; padding: 25px; border-radius: 15px; width: 240px; }
+        .card img { width: 125px; height: 125px; border-radius: 50%; border: 3px solid #0f0; margin-bottom: 15px; object-fit: cover; }
+        .card h2 { color: #0f0; margin: 10px 0; }
+        .card a { color: #00f5ff; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- লগইন স্ক্রিন -->
-    <div id="loginScreen" class="terminal-box" style="text-align: center;">
-        <h1>[ SYSTEM ACCESS REQUIRED ]</h1>
-        <input type="password" id="pin" placeholder="ENTER 078686">
-        <button onclick="check()">EXECUTE</button>
-    </div>
+    <canvas id="matrixCanvas"></canvas>
 
-    <!-- মেইন স্ক্রিন -->
-    <div id="mainScreen" class="hidden">
-        <div class="terminal-box">
-            <h2>SYSTEM BREACHED - AUTHORIZED ACCESS</h2>
-            <div id="games" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <div class="game-panel">1. <button onclick="alert('MATH: 50+50=?')">CALC</button></div>
-                <div class="game-panel">2. <button onclick="alert('COLOR: Find the Green pixel')">FIND</button></div>
-                <div class="game-panel">3. <button onclick="alert('LOGIC: 0 or 1?')">LOGIC</button></div>
-                <div class="game-panel">4. <button onclick="alert('SPEED: Type fast!')">SPEED</button></div>
-                <div class="game-panel">5. <button onclick="alert('CODE: Decode 0101')">DECODE</button></div>
+    <div class="content-wrapper">
+        <div id="quizScreen">
+            <h1 class="glitch-title">SECURITY BREACH</h1>
+            <div id="consoleLog"></div>
+            <div class="btn-wrapper">
+                <input type="password" id="passInput" placeholder="ENTER PIN" style="background:#000; color:#0f0; border:1px solid #0f0; padding:10px; margin-bottom:10px;"><br>
+                <button onclick="checkPass()">BYPASS SYSTEM</button>
             </div>
-            
-            <div class="grid" id="container"></div>
+        </div>
+
+        <div id="accessScreen" class="hidden-panel">
+            <h1 class="glitch-title">SYSTEM INFILTRATED</h1>
+            <div class="container">
+                <div class="card">
+                    <img src="https://unavatar.io/tiktok/yeasin_bhai_86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Yeasin'" alt="Yeasin">
+                    <h2>Yeasin</h2>
+                    <p>Age: 15+</p>
+                    <a href="https://www.tiktok.com/@yeasin_bhai_86" target="_blank">@yeasin_bhai_86</a>
+                </div>
+                <div class="card">
+                    <img src="https://unavatar.io/tiktok/tamjidking86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Tanjid'" alt="Tanjid">
+                    <h2>Tanjid</h2>
+                    <p>Age: 13+</p>
+                    <a href="https://www.tiktok.com/@tamjidking86" target="_blank">@tamjidking86</a>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="musicBox"></div>
 
     <script>
-        function check() {
-            if(document.getElementById('pin').value === "078686") {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('mainScreen').classList.remove('hidden');
-                document.getElementById('musicBox').innerHTML = '<iframe src="https://www.youtube.com/embed/LD3ZrGA_bG0?autoplay=1" class="hidden"></iframe>';
-                
-                // ৫০টি আইটেম তৈরি
-                let container = document.getElementById('container');
-                for(let i=1; i<=50; i++) {
-                    container.innerHTML += `<div class="card">
-                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${i}" width="40"><br>
-                        USER_${1000+i}
-                    </div>`;
-                }
-            } else { alert("ACCESS DENIED"); }
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const alphabet = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*";
+        const fontSize = 16; const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0'; ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                rainDrops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 30);
+
+        function checkPass() {
+            let pass = document.getElementById('passInput').value;
+            if (pass === "078686") {
+                document.getElementById('quizScreen').classList.add('hidden-panel');
+                document.getElementById('accessScreen').classList.remove('hidden-panel');
+                // নতুন গানের লিঙ্ক সেট করা হয়েছে
+                document.getElementById('musicBox').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/LD3ZrGA_bG0?autoplay=1&loop=1&playlist=LD3ZrGA_bG0" frameborder="0" allow="autoplay"></iframe>';
+            } else {
+                alert("ACCESS DENIED!");
+            }
         }
     </script>
 </body>
-</html>
+</html> eta te tumi ki ki update korte parbe amk doya kore bolo?
