@@ -2,61 +2,79 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>CYBER-TERMINAL V.2.0</title>
+    <title>CYBER-TERMINAL V.5.0 | ADVANCED</title>
     <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 20px; }
+        :root { --neon: #0f0; --bg: #050505; }
+        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; margin: 0; padding: 10px; }
+        .terminal-box { border: 1px solid var(--neon); padding: 15px; background: rgba(0, 20, 0, 0.8); margin-bottom: 10px; }
         .hidden { display: none !important; }
-        .terminal-box { border: 1px solid #0f0; padding: 20px; background: rgba(0, 20, 0, 0.9); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 20px; }
-        .card { border: 1px solid #0f0; padding: 5px; text-align: center; font-size: 10px; }
-        .game-panel { border: 1px solid #ff0; padding: 15px; margin: 10px 0; color: #ff0; }
-        button { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; cursor: pointer; }
-        button:hover { background: #0f0; color: #000; }
+        
+        /* উপরের কার্ড গ্রিড */
+        #userGrid { display: grid; grid-template-columns: repeat(20, 1fr); gap: 2px; max-height: 200px; overflow-y: auto; border: 1px solid var(--neon); padding: 5px; }
+        .card { border: 0.5px solid #040; padding: 2px; text-align: center; font-size: 8px; }
+        
+        /* নিচের কন্ট্রোল প্যানেল */
+        .controls { display: flex; gap: 10px; margin-top: 10px; }
+        button { background: #000; color: var(--neon); border: 1px solid var(--neon); padding: 10px; cursor: pointer; }
+        button:hover { background: var(--neon); color: #000; }
+        #logs { height: 100px; overflow-y: scroll; border: 1px solid #333; padding: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <!-- লগইন স্ক্রিন -->
-    <div id="loginScreen" class="terminal-box" style="text-align: center;">
-        <h1>[ SYSTEM ACCESS REQUIRED ]</h1>
-        <input type="password" id="pin" placeholder="ENTER 078686">
-        <button onclick="check()">EXECUTE</button>
+    <!-- সাউন্ড সিস্টেম -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound">
+        <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="loginScreen" style="text-align: center; margin-top: 20%;">
+        <h1>[ SYSTEM ACCESS ]</h1>
+        <input type="password" id="pin" placeholder="ENTER PIN">
+        <button onclick="access()">EXECUTE</button>
     </div>
 
-    <!-- মেইন স্ক্রিন -->
     <div id="mainScreen" class="hidden">
+        <!-- ১. উপরে কার্ডগুলো -->
+        <h3>NETWORK NODES (200)</h3>
+        <div id="userGrid"></div>
+
+        <!-- ২. নিচে কনসোল ও গেমস -->
         <div class="terminal-box">
-            <h2>SYSTEM BREACHED - AUTHORIZED ACCESS</h2>
-            <div id="games" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <div class="game-panel">1. <button onclick="alert('MATH: 50+50=?')">CALC</button></div>
-                <div class="game-panel">2. <button onclick="alert('COLOR: Find the Green pixel')">FIND</button></div>
-                <div class="game-panel">3. <button onclick="alert('LOGIC: 0 or 1?')">LOGIC</button></div>
-                <div class="game-panel">4. <button onclick="alert('SPEED: Type fast!')">SPEED</button></div>
-                <div class="game-panel">5. <button onclick="alert('CODE: Decode 0101')">DECODE</button></div>
+            <div class="controls">
+                <button onclick="playSound(); run('MATH')">MATH_CORE</button>
+                <button onclick="playSound(); run('LOGIC')">LOGIC_GATE</button>
+                <button onclick="playSound(); run('SPEED')">SPEED_TEST</button>
+                <button onclick="playSound(); run('DECODE')">DECODE_V1</button>
             </div>
-            
-            <div class="grid" id="container"></div>
+            <br>
+            <div id="logs"> > SYSTEM_READY...</div>
         </div>
     </div>
 
-    <div id="musicBox"></div>
-
     <script>
-        function check() {
+        function playSound() {
+            document.getElementById('clickSound').play();
+        }
+
+        function access() {
             if(document.getElementById('pin').value === "078686") {
+                document.getElementById('bgMusic').play(); // মিউজিক অন
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainScreen').classList.remove('hidden');
-                document.getElementById('musicBox').innerHTML = '<iframe src="https://www.youtube.com/embed/LD3ZrGA_bG0?autoplay=1" class="hidden"></iframe>';
                 
-                // ৫০টি আইটেম তৈরি
-                let container = document.getElementById('container');
-                for(let i=1; i<=50; i++) {
-                    container.innerHTML += `<div class="card">
-                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${i}" width="40"><br>
-                        USER_${1000+i}
-                    </div>`;
+                let grid = document.getElementById('userGrid');
+                for(let i=1; i<=200; i++) {
+                    grid.innerHTML += `<div class="card"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=${i}" width="15"><br>ID_${1000+i}</div>`;
                 }
+                document.getElementById('logs').innerHTML += "<br> > NODES LOADED. SOUND SYSTEM ACTIVE.";
             } else { alert("ACCESS DENIED"); }
+        }
+
+        function run(type) {
+            document.getElementById('logs').innerHTML += `<br> > RUNNING ${type}_PROCEDURE...`;
         }
     </script>
 </body>
