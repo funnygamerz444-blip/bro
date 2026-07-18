@@ -2,94 +2,75 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Friends Info - Cyber Edition Pro</title>
+    <title>Cyber System - Extended</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background: #000; 
-            color: #0f0; 
-            font-family: 'Courier New', Courier, monospace; 
-            text-align: center; 
-            overflow: hidden;
-            height: 100vh;
-            position: relative;
-        }
-        #matrixCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.12; }
-        .content-wrapper { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        body { background: #000; color: #0f0; font-family: monospace; text-align: center; overflow-x: hidden; }
         .hidden-panel { display: none !important; }
-        .glitch-title { font-size: 35px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 10px #0f0; margin-bottom: 25px; }
-        #consoleLog { width: 100%; max-width: 450px; background: rgba(0, 15, 0, 0.85); border: 1px solid #0f0; padding: 10px; border-radius: 5px; margin-bottom: 25px; font-size: 13px; text-align: left; height: 80px; overflow-y: hidden; }
-        .btn-wrapper button { padding: 15px 45px; font-size: 20px; cursor: pointer; border-radius: 5px; border: 2px solid #0f0; background: transparent; color: #0f0; transition: 0.3s; }
-        .btn-wrapper button:hover { background: #0f0; color: #000; }
-        .container { display: flex; justify-content: center; gap: 35px; margin-top: 10px; flex-wrap: wrap; }
-        .card { background: rgba(10, 10, 10, 0.9); border: 2px solid #0f0; padding: 25px; border-radius: 15px; width: 240px; }
-        .card img { width: 125px; height: 125px; border-radius: 50%; border: 3px solid #0f0; margin-bottom: 15px; object-fit: cover; }
-        .card h2 { color: #0f0; margin: 10px 0; }
-        .card a { color: #00f5ff; text-decoration: none; font-weight: bold; }
+        .glitch-title { font-size: 30px; margin: 20px; text-transform: uppercase; }
+        
+        /* প্রোফাইল গ্রিড */
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+        .card { background: #0a0a0a; border: 1px solid #0f0; padding: 10px; border-radius: 8px; font-size: 12px; }
+        .card img { width: 60px; height: 60px; border-radius: 50%; border: 1px solid #0f0; }
+
+        /* গেম স্টাইল */
+        #gameArea { background: #050; padding: 20px; border: 2px dashed #0f0; margin: 20px auto; max-width: 400px; }
     </style>
 </head>
 <body>
 
-    <canvas id="matrixCanvas"></canvas>
+    <div id="quizScreen">
+        <h1 class="glitch-title">SECURITY BREACH</h1>
+        <input type="password" id="passInput" placeholder="ENTER PIN" style="background:#000; color:#0f0; border:1px solid #0f0; padding:10px;">
+        <button onclick="checkPass()">BYPASS</button>
+    </div>
 
-    <div class="content-wrapper">
-        <div id="quizScreen">
-            <h1 class="glitch-title">SECURITY BREACH</h1>
-            <div id="consoleLog"></div>
-            <div class="btn-wrapper">
-                <input type="password" id="passInput" placeholder="ENTER PIN" style="background:#000; color:#0f0; border:1px solid #0f0; padding:10px; margin-bottom:10px;"><br>
-                <button onclick="checkPass()">BYPASS SYSTEM</button>
-            </div>
+    <div id="accessScreen" class="hidden-panel">
+        <h1 class="glitch-title">SYSTEM INFILTRATED</h1>
+        
+        <!-- গেম সেকশন -->
+        <div id="gameArea">
+            <h3>MINI-GAME: GUESS THE NUMBER (1-10)</h3>
+            <input type="number" id="guessInput" style="width:50px;">
+            <button onclick="playGame()">GUESS</button>
+            <p id="gameResult"></p>
         </div>
 
-        <div id="accessScreen" class="hidden-panel">
-            <h1 class="glitch-title">SYSTEM INFILTRATED</h1>
-            <div class="container">
-                <div class="card">
-                    <img src="https://unavatar.io/tiktok/yeasin_bhai_86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Yeasin'" alt="Yeasin">
-                    <h2>Yeasin</h2>
-                    <p>Age: 15+</p>
-                    <a href="https://www.tiktok.com/@yeasin_bhai_86" target="_blank">@yeasin_bhai_86</a>
-                </div>
-                <div class="card">
-                    <img src="https://unavatar.io/tiktok/tamjidking86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Tanjid'" alt="Tanjid">
-                    <h2>Tanjid</h2>
-                    <p>Age: 13+</p>
-                    <a href="https://www.tiktok.com/@tamjidking86" target="_blank">@tamjidking86</a>
-                </div>
-            </div>
-        </div>
+        <div class="container" id="profileGrid"></div>
     </div>
 
     <div id="musicBox"></div>
 
     <script>
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const alphabet = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*";
-        const fontSize = 16; const columns = canvas.width / fontSize;
-        const rainDrops = Array(Math.floor(columns)).fill(1);
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0f0'; ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
-                rainDrops[i]++;
+        // ৫০টি আইটেম জেনারেট করা
+        function loadProfiles() {
+            const grid = document.getElementById('profileGrid');
+            for (let i = 1; i <= 50; i++) {
+                grid.innerHTML += `
+                    <div class="card">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${i}" alt="User">
+                        <h3>Friend ${i}</h3>
+                        <p>ID: 860${i}</p>
+                    </div>
+                `;
             }
         }
-        setInterval(drawMatrix, 30);
+
+        // গেম ফাংশন
+        function playGame() {
+            let userGuess = document.getElementById('guessInput').value;
+            let target = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('gameResult').innerText = 
+                (userGuess == target) ? "SUCCESS: ACCESS GRANTED" : "FAILED: WRONG GUESS";
+        }
 
         function checkPass() {
-            let pass = document.getElementById('passInput').value;
-            if (pass === "078686") {
+            if (document.getElementById('passInput').value === "078686") {
                 document.getElementById('quizScreen').classList.add('hidden-panel');
                 document.getElementById('accessScreen').classList.remove('hidden-panel');
-                // নতুন গানের লিঙ্ক সেট করা হয়েছে
                 document.getElementById('musicBox').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/LD3ZrGA_bG0?autoplay=1&loop=1&playlist=LD3ZrGA_bG0" frameborder="0" allow="autoplay"></iframe>';
+                loadProfiles();
             } else {
                 alert("ACCESS DENIED!");
             }
