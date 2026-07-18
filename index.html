@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Friends Info - Cyber Edition Pro</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: #000; 
+            color: #0f0; 
+            font-family: 'Courier New', Courier, monospace; 
+            text-align: center; 
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* Matrix Rain Canvas */
+        #matrixCanvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.12;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .hidden-panel { display: none !important; }
+
+        /* Cyber Glitch Title Effect */
+        .glitch-title {
+            font-size: 35px;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 10px #0f0;
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+            animation: glitch 1s linear infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff, 0 0 10px #0f0; }
+            25% { text-shadow: -2px -2px 0 #ff00ff, 2px 2px 0 #00ffff, 0 0 10px #0f0; }
+            50% { text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff, 0 0 10px #0f0; }
+            75% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ffff, 0 0 10px #0f0; }
+            100% { text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff, 0 0 10px #0f0; }
+        }
+
+        /* Hacker Console Log Status */
+        #consoleLog {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(0, 15, 0, 0.85);
+            border: 1px solid #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            height: 80px;
+            overflow-y: hidden;
+        }
+
+        /* Cyber Button */
+        .btn-wrapper button { 
+            padding: 15px 45px; 
+            font-size: 20px; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            border: 2px solid #0f0; 
+            font-weight: bold; 
+            background: transparent; 
+            color: #0f0; 
+            text-shadow: 0 0 5px #0f0;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 15px rgba(0, 255, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+        }
+        .btn-wrapper button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 30px #0f0;
+            text-shadow: none;
+        }
+        
+        /* Profiles Container */
+        .container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 35px; 
+            margin-top: 10px; 
+            flex-wrap: wrap; 
+            animation: slideUp 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glowing Cyber Cards */
+        .card { 
+            background: rgba(10, 10, 10, 0.9); 
+            border: 2px solid #0f0; 
+            padding: 25px; 
+            border-radius: 15px; 
+            width: 240px; 
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2); 
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: pulseBorder 2s infinite alternate;
+        }
+        @keyframes pulseBorder {
+            0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); border-color: #0f0; }
+            100% { box-shadow: 0 0 25px rgba(0, 255, 0, 0.5); border-color: #00ffaa; }
+        }
+        .card:hover {
+            transform: translateY(-12px) scale(1.04);
+            border-color: #00f5ff;
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.7);
+        }
+
+        /* Scanline Overlay */
+        .card::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 0, 0.08) 50%);
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* TikTok Avatar Style */
+        .card img { 
+            width: 125px; 
+            height: 125px; 
+            border-radius: 50%; 
+            border: 3px solid #0f0; 
+            margin-bottom: 15px; 
+            object-fit: cover; 
+            transition: all 0.4s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+        }
+        .card:hover img {
+            border-color: #00f5ff;
+            transform: scale(1.05) rotate(4deg);
+            box-shadow: 0 0 25px rgba(0, 245, 255, 0.8);
+        }
+
+        .card h2 { color: #0f0; margin: 10px 0; font-size: 24px; text-shadow: 0 0 5px #0f0; letter-spacing: 1px; }
+        .card p { font-size: 16px; margin: 8px 0; color: #aaa; font-weight: bold; }
+        .card a { 
+            display: block; 
+            margin-top: 15px; 
+            color: #00f5ff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 15px; 
+            text-shadow: 0 0 5px #00f5ff;
+            transition: 0.3s;
+        }
+        .card a:hover {
+            color: #fff;
+            text-shadow: 0 0 15px #00f5ff;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="content-wrapper">
+        <div id="quizScreen">
+            <h1 class="glitch-title">SECURITY BREACH</h1>
+            <div id="consoleLog"></div>
+            <div class="btn-wrapper">
+                <button onclick="grantAccess()">BYPASS SYSTEM</button>
+            </div>
+        </div>
+
+        <div id="accessScreen" class="hidden-panel">
+            <h1 class="glitch-title">SYSTEM INFILTRATED</h1>
+            <div class="container">
+                <!-- Yeasin -->
+                <div class="card">
+                    <img src="https://unavatar.io/tiktok/yeasin_bhai_86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Yeasin'" alt="Yeasin">
+                    <h2>Yeasin</h2>
+                    <p>Age: 15+</p>
+                    <p>From: Chittagong</p>
+                    <a href="https://www.tiktok.com/@yeasin_bhai_86" target="_blank">@yeasin_bhai_86</a>
+                </div>
+                <!-- Tanjid -->
+                <div class="card">
+                    <img src="https://unavatar.io/tiktok/tamjidking86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Tanjid'" alt="Tanjid">
+                    <h2>Tanjid</h2>
+                    <p>Age: 13+</p>
+                    <p>From: Chittagong</p>
+                    <a href="https://www.tiktok.com/@tamjidking86" target="_blank">@tamjidking86</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- সুনির্দিষ্টভাবে নতুন গানটি ফিক্স করা মিউজিক বক্স -->
+    <div id="musicBox"></div>
+
+    <script>
+        // Matrix Canvas Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const alphabet = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*";
+        const fontSize = 16; const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0'; ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                rainDrops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 30);
+
+        // Terminal Typing Fake Log Effect
+        const logs = [
+            "> Initializing exploit target...",
+            "> Bypassing TikTok avatar firewalls...",
+            "> Fetching @yeasin_bhai_86 & @tamjidking86 data...",
+            "> Loading 'To Phir Aao' audio streams...",
+            "> System ready. Click bypass below!"
+        ];
+        let logIndex = 0;
+        function typeLogs() {
+            if (logIndex < logs.length) {
+                document.getElementById('consoleLog').innerHTML += logs[logIndex] + "<br>";
+                logIndex++;
+                setTimeout(typeLogs, 600);
+            }
+        }
+        typeLogs();
+
+        // Grant Access and Play FIXED Video Music
+        function grantAccess() {
+            document.getElementById('quizScreen').classList.add('hidden-panel');
+            document.getElementById('accessScreen').classList.remove('hidden-panel');
+            
+            // ইউটিউব শর্টস প্লে করার অফিশিয়াল ওয়ার্কিং মেথড
+            document.getElementById('musicBox').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/TvySOVJQ7XQ?autoplay=1&loop=1&playlist=TvySOVJQ7XQ&enablejsapi=1" frameborder="0" allow="autoplay"></iframe>';
+        }
+    </script>
+</body>
+</html>
