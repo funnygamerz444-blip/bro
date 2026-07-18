@@ -169,11 +169,21 @@
         .info { font-size: 1rem; color: #88ff88; margin: 5px 0; }
         .username { color: #00ffff; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 15px; }
 
-        .status-text {
-            margin-top: 25px;
-            font-size: 0.85rem;
-            color: #0f0;
-            letter-spacing: 1px;
+        .audio-container {
+            margin-top: 35px;
+            z-index: 10;
+            text-align: center;
+            background: rgba(0, 20, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #0f0;
+            width: 100%;
+            max-width: 400px;
+        }
+        #youtubeAudio {
+            border: 2px solid #0f0;
+            border-radius: 5px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -208,18 +218,18 @@
     <!-- MAIN HACKER INTERFACE -->
     <div class="title">System Infiltrated</div>
     <div class="container">
-        <!-- Card 1: Yeasin (1st Image Loaded directly via Base64) -->
+        <!-- Card 1: Yeasin -->
         <div class="card">
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8OF5GXFpmZ2aePC4dMzs..." alt="Yeasin" class="profile-img">
+            <img src="https://pixeldrain.com/api/file/bK9Y2K7X" alt="Yeasin" class="profile-img">
             <h2 class="name">Yeasin</h2>
             <p class="info">Age: 15+</p>
             <p class="info">From: Chattogram</p>
             <a href="https://www.tiktok.com/@yeasin_bhai_86?_r=1&_t=ZS-987pcwSv5wz" target="_blank" class="username">@yeasin_bhai_86</a>
         </div>
 
-        <!-- Card 2: Tanjid (2nd Image Loaded directly via Base64) -->
+        <!-- Card 2: Tanjid -->
         <div class="card">
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8OF5GXFpmZ2aePC4dMzs..." alt="Tanjid" class="profile-img">
+            <img src="https://pixeldrain.com/api/file/m9pQ6M4B" alt="Tanjid" class="profile-img">
             <h2 class="name">Tanjid</h2>
             <p class="info">Age: 13+</p>
             <p class="info">From: Chattogram</p>
@@ -227,12 +237,15 @@
         </div>
     </div>
 
-    <div class="status-text">⚡ SYSTEM SOUNDTRACK ACTIVE: HackingYT.mp3 ⚡</div>
-
-    <!-- AUDIO CONNECTOR -->
-    <audio id="hackerAudio" loop preload="auto">
-        <source src="HackingYT.mp3" type="audio/mpeg">
-    </audio>
+    <!-- AUTOMATIC HACKING MUSIC SOURCE -->
+    <div class="audio-container">
+        <p style="font-size: 0.9rem; color: #0f0; font-weight: bold; letter-spacing: 1px;">⚡ SYSTEM SOUNDTRACK ACTIVE ⚡</p>
+        <iframe id="youtubeAudio" width="280" height="60" 
+            src="https://www.youtube.com/embed/Y8w-2lzM-C4?enablejsapi=1&version=3&controls=0" 
+            title="Hacker Music" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+        </iframe>
+    </div>
 
     <script>
         // Matrix Rain Background Effect
@@ -276,13 +289,9 @@
                 if (currentPin === correctPin) {
                     document.getElementById('lockScreen').style.display = 'none';
                     
-                    // Audio trigger on correct pin entry
-                    const audio = document.getElementById('hackerAudio');
-                    if (audio) {
-                        audio.play().catch(function(error) {
-                            console.log("Autoplay blocked: ", error);
-                        });
-                    }
+                    // Direct YouTube embed autoplay trigger after user pin interaction
+                    const iframe = document.getElementById('youtubeAudio');
+                    iframe.src = "https://www.youtube.com/embed/Y8w-2lzM-C4?autoplay=1&loop=1&playlist=Y8w-2lzM-C4&controls=0";
                 } else if (currentPin.length === 6) {
                     setTimeout(() => {
                         alert("ACCESS DENIED: Wrong Password!");
