@@ -2,79 +2,69 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>CYBER-TERMINAL V.5.0 | ADVANCED</title>
+    <title>CYBER-COMMAND V.7.0</title>
     <style>
         :root { --neon: #0f0; --bg: #050505; }
-        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; margin: 0; padding: 10px; }
-        .terminal-box { border: 1px solid var(--neon); padding: 15px; background: rgba(0, 20, 0, 0.8); margin-bottom: 10px; }
+        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
+        .box { border: 1px solid var(--neon); padding: 20px; background: #000; box-shadow: 0 0 10px rgba(0,255,0,0.1); }
         .hidden { display: none !important; }
-        
-        /* উপরের কার্ড গ্রিড */
-        #userGrid { display: grid; grid-template-columns: repeat(20, 1fr); gap: 2px; max-height: 200px; overflow-y: auto; border: 1px solid var(--neon); padding: 5px; }
-        .card { border: 0.5px solid #040; padding: 2px; text-align: center; font-size: 8px; }
-        
-        /* নিচের কন্ট্রোল প্যানেল */
-        .controls { display: flex; gap: 10px; margin-top: 10px; }
-        button { background: #000; color: var(--neon); border: 1px solid var(--neon); padding: 10px; cursor: pointer; }
+        #monitor { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat { border: 1px solid var(--neon); padding: 10px; text-align: center; }
+        #console { height: 300px; overflow-y: auto; background: #000; border: 1px solid #222; padding: 15px; font-size: 14px; }
+        .prompt { display: flex; margin-top: 10px; }
+        input { flex: 1; background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 10px; }
+        button { background: #000; color: var(--neon); border: 1px solid var(--neon); padding: 10px 20px; cursor: pointer; }
         button:hover { background: var(--neon); color: #000; }
-        #logs { height: 100px; overflow-y: scroll; border: 1px solid #333; padding: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <!-- সাউন্ড সিস্টেম -->
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="clickSound">
-        <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
-    <div id="loginScreen" style="text-align: center; margin-top: 20%;">
+    <div id="login" style="text-align: center; margin-top: 15%;">
         <h1>[ SYSTEM ACCESS ]</h1>
         <input type="password" id="pin" placeholder="ENTER PIN">
-        <button onclick="access()">EXECUTE</button>
+        <button onclick="auth()">EXECUTE</button>
     </div>
 
-    <div id="mainScreen" class="hidden">
-        <!-- ১. উপরে কার্ডগুলো -->
-        <h3>NETWORK NODES (200)</h3>
-        <div id="userGrid"></div>
-
-        <!-- ২. নিচে কনসোল ও গেমস -->
-        <div class="terminal-box">
-            <div class="controls">
-                <button onclick="playSound(); run('MATH')">MATH_CORE</button>
-                <button onclick="playSound(); run('LOGIC')">LOGIC_GATE</button>
-                <button onclick="playSound(); run('SPEED')">SPEED_TEST</button>
-                <button onclick="playSound(); run('DECODE')">DECODE_V1</button>
+    <div id="main" class="hidden">
+        <div id="monitor">
+            <div class="stat">CPU: <span id="cpu">0%</span></div>
+            <div class="stat">RAM: <span id="ram">0%</span></div>
+            <div class="stat">NET: <span id="net">STABLE</span></div>
+        </div>
+        <div class="box">
+            <div id="console"> > SYSTEM_BOOTED. WELCOME ADMIN.</div>
+            <div class="prompt">
+                <input type="text" id="cmdInput" placeholder="ENTER COMMAND...">
+                <button onclick="processCmd()">RUN</button>
             </div>
-            <br>
-            <div id="logs"> > SYSTEM_READY...</div>
         </div>
     </div>
 
     <script>
-        function playSound() {
-            document.getElementById('clickSound').play();
-        }
-
-        function access() {
+        function auth() {
             if(document.getElementById('pin').value === "078686") {
-                document.getElementById('bgMusic').play(); // মিউজিক অন
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('mainScreen').classList.remove('hidden');
-                
-                let grid = document.getElementById('userGrid');
-                for(let i=1; i<=200; i++) {
-                    grid.innerHTML += `<div class="card"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=${i}" width="15"><br>ID_${1000+i}</div>`;
-                }
-                document.getElementById('logs').innerHTML += "<br> > NODES LOADED. SOUND SYSTEM ACTIVE.";
+                document.getElementById('login').classList.add('hidden');
+                document.getElementById('main').classList.remove('hidden');
+                document.getElementById('bgMusic').play();
+                updateStats();
             } else { alert("ACCESS DENIED"); }
         }
 
-        function run(type) {
-            document.getElementById('logs').innerHTML += `<br> > RUNNING ${type}_PROCEDURE...`;
+        function processCmd() {
+            let cmd = document.getElementById('cmdInput').value.toUpperCase();
+            let con = document.getElementById('console');
+            con.innerHTML += `<br> > $ ${cmd} ... EXECUTING... SUCCESS.`;
+            document.getElementById('cmdInput').value = '';
+            con.scrollTop = con.scrollHeight;
+        }
+
+        function updateStats() {
+            setInterval(() => {
+                document.getElementById('cpu').innerText = Math.floor(Math.random() * 100) + "%";
+                document.getElementById('ram').innerText = Math.floor(Math.random() * 100) + "%";
+            }, 2000);
         }
     </script>
 </body>
