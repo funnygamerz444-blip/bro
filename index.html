@@ -1,309 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM INFILTRATED</title>
+    <title>Best Friends Info - Cyber Edition Pro</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: #000; 
+            color: #0f0; 
+            font-family: 'Courier New', Courier, monospace; 
+            text-align: center; 
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* Matrix Rain Canvas */
+        #matrixCanvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.12;
         }
 
-        body {
-            background-color: #000;
-            color: #0f0;
-            overflow-x: hidden;
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
             padding: 20px;
         }
 
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-        }
+        .hidden-panel { display: none !important; }
 
-        /* --- LOCK SCREEN OVERLAY --- */
-        #lockScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.96);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #0f0;
-        }
-
-        .lock-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            text-align: center;
+        /* Cyber Glitch Title Effect */
+        .glitch-title {
+            font-size: 35px;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
             text-shadow: 0 0 10px #0f0;
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+            animation: glitch 1s linear infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff, 0 0 10px #0f0; }
+            25% { text-shadow: -2px -2px 0 #ff00ff, 2px 2px 0 #00ffff, 0 0 10px #0f0; }
+            50% { text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff, 0 0 10px #0f0; }
+            75% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ffff, 0 0 10px #0f0; }
+            100% { text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff, 0 0 10px #0f0; }
+        }
+
+        /* Hacker Console Log Status */
+        #consoleLog {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(0, 15, 0, 0.85);
+            border: 1px solid #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            height: 80px;
+            overflow-y: hidden;
+        }
+
+        /* Cyber Button */
+        .btn-wrapper button { 
+            padding: 15px 45px; 
+            font-size: 20px; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            border: 2px solid #0f0; 
+            font-weight: bold; 
+            background: transparent; 
+            color: #0f0; 
+            text-shadow: 0 0 5px #0f0;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 15px rgba(0, 255, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+            font-family: 'Courier New', Courier, monospace;
             letter-spacing: 2px;
         }
-
-        .sub-btn {
-            background: #ff0000;
-            color: #fff;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 25px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .sub-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px #ff0000;
-        }
-
-        .pin-display {
-            width: 220px;
-            height: 45px;
-            background: #111;
-            border: 2px solid #0f0;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            text-align: center;
-            line-height: 45px;
-            letter-spacing: 5px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            width: 240px;
-        }
-
-        .key {
-            width: 65px;
-            height: 65px;
-            background: rgba(0, 40, 0, 0.5);
-            border: 2px solid #0f0;
-            border-radius: 50%;
-            color: #0f0;
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .key:active {
+        .btn-wrapper button:hover {
             background: #0f0;
             color: #000;
+            box-shadow: 0 0 30px #0f0;
+            text-shadow: none;
         }
-        .key.clear {
-            font-size: 0.9rem;
-            border-color: #ff0055;
-            color: #ff0055;
+        
+        /* Profiles Container */
+        .container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 35px; 
+            margin-top: 10px; 
+            flex-wrap: wrap; 
+            animation: slideUp 1s cubic-bezier(0.075, 0.82, 0.165, 1);
         }
-
-        /* --- MAIN INTERFACE --- */
-        .title {
-            font-size: 2.2rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 20px 0 40px 0;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 10px #0f0;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            width: 100%;
-            max-width: 400px;
-            z-index: 1;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card {
-            background: rgba(0, 10, 0, 0.85);
-            border: 2px solid #0f0;
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
-            backdrop-filter: blur(5px);
-            background-image: linear-gradient(rgba(0, 255, 0, 0.03) 50%, transparent 50%);
+        /* Glowing Cyber Cards */
+        .card { 
+            background: rgba(10, 10, 10, 0.9); 
+            border: 2px solid #0f0; 
+            padding: 25px; 
+            border-radius: 15px; 
+            width: 240px; 
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2); 
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: pulseBorder 2s infinite alternate;
+        }
+        @keyframes pulseBorder {
+            0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); border-color: #0f0; }
+            100% { box-shadow: 0 0 25px rgba(0, 255, 0, 0.5); border-color: #00ffaa; }
+        }
+        .card:hover {
+            transform: translateY(-12px) scale(1.04);
+            border-color: #00f5ff;
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.7);
+        }
+
+        /* Scanline Overlay */
+        .card::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 0, 0.08) 50%);
             background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
         }
 
-        .profile-img {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 3px solid #0f0;
-            margin: 0 auto 15px auto;
-            object-fit: cover;
-            box-shadow: 0 0 15px #0f0;
+        /* TikTok Avatar Style */
+        .card img { 
+            width: 125px; 
+            height: 125px; 
+            border-radius: 50%; 
+            border: 3px solid #0f0; 
+            margin-bottom: 15px; 
+            object-fit: cover; 
+            transition: all 0.4s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+        }
+        .card:hover img {
+            border-color: #00f5ff;
+            transform: scale(1.05) rotate(4deg);
+            box-shadow: 0 0 25px rgba(0, 245, 255, 0.8);
         }
 
-        .name { font-size: 1.8rem; color: #0f0; margin-bottom: 10px; }
-        .info { font-size: 1rem; color: #88ff88; margin: 5px 0; }
-        .username { color: #00ffff; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 15px; }
-
-        .audio-container {
-            margin-top: 35px;
-            z-index: 10;
-            text-align: center;
-            background: rgba(0, 20, 0, 0.6);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #0f0;
-            width: 100%;
-            max-width: 400px;
+        .card h2 { color: #0f0; margin: 10px 0; font-size: 24px; text-shadow: 0 0 5px #0f0; letter-spacing: 1px; }
+        .card p { font-size: 16px; margin: 8px 0; color: #aaa; font-weight: bold; }
+        .card a { 
+            display: block; 
+            margin-top: 15px; 
+            color: #00f5ff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 15px; 
+            text-shadow: 0 0 5px #00f5ff;
+            transition: 0.3s;
         }
-        #youtubeAudio {
-            border: 2px solid #0f0;
-            border-radius: 5px;
-            margin-top: 5px;
+        .card a:hover {
+            color: #fff;
+            text-shadow: 0 0 15px #00f5ff;
         }
     </style>
 </head>
 <body>
 
-    <!-- LOCK SCREEN OVERLAY (YT SUB + PIN) -->
-    <div id="lockScreen">
-        <div class="lock-title">STEP 1: SUBSCRIBE TO UNLOCK</div>
-        <a href="https://www.youtube.com/@LDR-YSN?sub_confirmation=1" target="_blank" class="sub-btn" onclick="enableKeypad()">🔴 SUBSCRIBE @LDR-YSN</a>
-
-        <div class="lock-title" style="margin-top: 10px;">STEP 2: ENTER BYPASS PIN</div>
-        <div class="pin-display" id="pinDisplay">------</div>
-        
-        <div class="keypad">
-            <div class="key" onclick="pressNum(1)">1</div>
-            <div class="key" onclick="pressNum(2)">2</div>
-            <div class="key" onclick="pressNum(3)">3</div>
-            <div class="key" onclick="pressNum(4)">4</div>
-            <div class="key" onclick="pressNum(5)">5</div>
-            <div class="key" onclick="pressNum(6)">6</div>
-            <div class="key" onclick="pressNum(7)">7</div>
-            <div class="key" onclick="pressNum(8)">8</div>
-            <div class="key" onclick="pressNum(9)">9</div>
-            <div class="key" onclick="pressNum(0)">0</div>
-            <div class="key clear" onclick="clearPin()">CLR</div>
-        </div>
-    </div>
-
-    <!-- BACKGROUND MATRIX RAIN -->
     <canvas id="matrixCanvas"></canvas>
 
-    <!-- MAIN HACKER INTERFACE -->
-    <div class="title">System Infiltrated</div>
-    <div class="container">
-        <!-- Card 1: Yeasin -->
-        <div class="card">
-            <img src="https://pixeldrain.com/api/file/bK9Y2K7X" alt="Yeasin" class="profile-img">
-            <h2 class="name">Yeasin</h2>
-            <p class="info">Age: 15+</p>
-            <p class="info">From: Chattogram</p>
-            <a href="https://www.tiktok.com/@yeasin_bhai_86?_r=1&_t=ZS-987pcwSv5wz" target="_blank" class="username">@yeasin_bhai_86</a>
+    <div class="content-wrapper">
+        <div id="quizScreen">
+            <h1 class="glitch-title">SECURITY BREACH</h1>
+            <div id="consoleLog"></div>
+            <div class="btn-wrapper">
+                <button onclick="grantAccess()">BYPASS SYSTEM</button>
+            </div>
         </div>
 
-        <!-- Card 2: Tanjid -->
-        <div class="card">
-            <img src="https://pixeldrain.com/api/file/m9pQ6M4B" alt="Tanjid" class="profile-img">
-            <h2 class="name">Tanjid</h2>
-            <p class="info">Age: 13+</p>
-            <p class="info">From: Chattogram</p>
-            <a href="https://www.tiktok.com/@tamjidking86?_r=1&_t=ZS-987ph8xYgtx" target="_blank" class="username">@tamjidking86</a>
+        <div id="accessScreen" class="hidden-panel">
+            <h1 class="glitch-title">SYSTEM INFILTRATED</h1>
+            <div class="container">
+                <!-- Yeasin -->
+                <div class="card">
+                    <img src="https://unavatar.io/tiktok/yeasin_bhai_86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Yeasin'" alt="Yeasin">
+                    <h2>Yeasin</h2>
+                    <p>Age: 15+</p>
+                    <p>From: Chittagong</p>
+                    <a href="https://www.tiktok.com/@yeasin_bhai_86" target="_blank">@yeasin_bhai_86</a>
+                </div>
+                <!-- Tanjid -->
+                <div class="card">
+                    <img src="https://unavatar.io/tiktok/tamjidking86" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Tanjid'" alt="Tanjid">
+                    <h2>Tanjid</h2>
+                    <p>Age: 13+</p>
+                    <p>From: Chittagong</p>
+                    <a href="https://www.tiktok.com/@tamjidking86" target="_blank">@tamjidking86</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- AUTOMATIC HACKING MUSIC SOURCE -->
-    <div class="audio-container">
-        <p style="font-size: 0.9rem; color: #0f0; font-weight: bold; letter-spacing: 1px;">⚡ SYSTEM SOUNDTRACK ACTIVE ⚡</p>
-        <iframe id="youtubeAudio" width="280" height="60" 
-            src="https://www.youtube.com/embed/Y8w-2lzM-C4?enablejsapi=1&version=3&controls=0" 
-            title="Hacker Music" frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-        </iframe>
-    </div>
+    <!-- সুনির্দিষ্টভাবে নতুন গানটি ফিক্স করা মিউজিক বক্স -->
+    <div id="musicBox"></div>
 
     <script>
-        // Matrix Rain Background Effect
+        // Matrix Canvas Effect
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resize();
-        window.addEventListener('resize', resize);
-        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*'.split('');
-        const drops = Array(Math.floor(canvas.width/16)).fill(1);
-        function draw() {
-            ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = '#0f0'; ctx.font = '16px monospace';
-            drops.forEach((y, i) => {
-                const text = chars[Math.floor(Math.random()*chars.length)];
-                ctx.fillText(text, i*16, y*16);
-                if(y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        }
-        setInterval(draw, 30);
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const alphabet = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*";
+        const fontSize = 16; const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
 
-        // Lock & Audio Logic
-        let currentPin = "";
-        const correctPin = "078686";
-        let hasSubscribed = false;
-
-        function enableKeypad() {
-            hasSubscribed = true;
-        }
-
-        function pressNum(num) {
-            if (!hasSubscribed) {
-                alert("Please click the YouTube Subscribe button first!");
-                return;
-            }
-            if (currentPin.length < 6) {
-                currentPin += num;
-                document.getElementById('pinDisplay').innerText = "*".repeat(currentPin.length);
-                
-                if (currentPin === correctPin) {
-                    document.getElementById('lockScreen').style.display = 'none';
-                    
-                    // Direct YouTube embed autoplay trigger after user pin interaction
-                    const iframe = document.getElementById('youtubeAudio');
-                    iframe.src = "https://www.youtube.com/embed/Y8w-2lzM-C4?autoplay=1&loop=1&playlist=Y8w-2lzM-C4&controls=0";
-                } else if (currentPin.length === 6) {
-                    setTimeout(() => {
-                        alert("ACCESS DENIED: Wrong Password!");
-                        clearPin();
-                    }, 100);
-                }
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0'; ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+                rainDrops[i]++;
             }
         }
+        setInterval(drawMatrix, 30);
 
-        function clearPin() {
-            currentPin = "";
-            document.getElementById('pinDisplay').innerText = "------";
+        // Terminal Typing Fake Log Effect
+        const logs = [
+            "> Initializing exploit target...",
+            "> Bypassing TikTok avatar firewalls...",
+            "> Fetching @yeasin_bhai_86 & @tamjidking86 data...",
+            "> Loading 'To Phir Aao' audio streams...",
+            "> System ready. Click bypass below!"
+        ];
+        let logIndex = 0;
+        function typeLogs() {
+            if (logIndex < logs.length) {
+                document.getElementById('consoleLog').innerHTML += logs[logIndex] + "<br>";
+                logIndex++;
+                setTimeout(typeLogs, 600);
+            }
+        }
+        typeLogs();
+
+        // Grant Access and Play FIXED Video Music
+        function grantAccess() {
+            document.getElementById('quizScreen').classList.add('hidden-panel');
+            document.getElementById('accessScreen').classList.remove('hidden-panel');
+            
+            // ইউটিউব শর্টস প্লে করার অফিশিয়াল ওয়ার্কিং মেথড
+            document.getElementById('musicBox').innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/TvySOVJQ7XQ?autoplay=1&loop=1&playlist=TvySOVJQ7XQ&enablejsapi=1" frameborder="0" allow="autoplay"></iframe>';
         }
     </script>
 </body>
