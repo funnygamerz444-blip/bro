@@ -123,7 +123,7 @@
             color: #ff0055;
         }
 
-        /* --- MAIN PANELS --- */
+        /* --- MAIN INTERFACE --- */
         .title {
             font-size: 2.2rem;
             font-weight: bold;
@@ -174,14 +174,12 @@
             font-size: 0.85rem;
             color: #0f0;
             letter-spacing: 1px;
-            animation: blink 1.5s infinite;
         }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
 
-    <!-- LOCK SCREEN OVERLAY -->
+    <!-- LOCK SCREEN OVERLAY (YT SUB + PIN) -->
     <div id="lockScreen">
         <div class="lock-title">STEP 1: SUBSCRIBE TO UNLOCK</div>
         <a href="https://www.youtube.com/@LDR-YSN?sub_confirmation=1" target="_blank" class="sub-btn" onclick="enableKeypad()">🔴 SUBSCRIBE @LDR-YSN</a>
@@ -210,19 +208,18 @@
     <!-- MAIN HACKER INTERFACE -->
     <div class="title">System Infiltrated</div>
     <div class="container">
-        <!-- Card 1: Yeasin -->
+        <!-- Card 1: Yeasin (1st Image Loaded directly via Base64) -->
         <div class="card">
-            <!-- ডিরেক্ট টিকটক সিডিএন ইমেজ লিংক ট্র্যাকিং মেথড -->
-            <img src="https://images.weserv.nl/?url=www.tiktok.com/api/v1/user/avatar/?user_id=yeasin_bhai_86&default=https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80" alt="Yeasin" class="profile-img">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8OF5GXFpmZ2aePC4dMzs..." alt="Yeasin" class="profile-img">
             <h2 class="name">Yeasin</h2>
             <p class="info">Age: 15+</p>
             <p class="info">From: Chattogram</p>
             <a href="https://www.tiktok.com/@yeasin_bhai_86?_r=1&_t=ZS-987pcwSv5wz" target="_blank" class="username">@yeasin_bhai_86</a>
         </div>
 
-        <!-- Card 2: Tanjid -->
+        <!-- Card 2: Tanjid (2nd Image Loaded directly via Base64) -->
         <div class="card">
-            <img src="https://images.weserv.nl/?url=www.tiktok.com/api/v1/user/avatar/?user_id=tamjidking86&default=https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?q=80" alt="Tanjid" class="profile-img">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8OF5GXFpmZ2aePC4dMzs..." alt="Tanjid" class="profile-img">
             <h2 class="name">Tanjid</h2>
             <p class="info">Age: 13+</p>
             <p class="info">From: Chattogram</p>
@@ -232,13 +229,13 @@
 
     <div class="status-text">⚡ SYSTEM SOUNDTRACK ACTIVE: HackingYT.mp3 ⚡</div>
 
-    <!-- AUDIO CONFIGURATION FOR GITHUB USER DIRECTORY -->
+    <!-- AUDIO CONNECTOR -->
     <audio id="hackerAudio" loop preload="auto">
         <source src="HackingYT.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Matrix Canvas Animation
+        // Matrix Rain Background Effect
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -258,7 +255,7 @@
         }
         setInterval(draw, 30);
 
-        // Security Core Logic
+        // Lock & Audio Logic
         let currentPin = "";
         const correctPin = "078686";
         let hasSubscribed = false;
@@ -279,11 +276,11 @@
                 if (currentPin === correctPin) {
                     document.getElementById('lockScreen').style.display = 'none';
                     
-                    // User Interaction Triggered Audio Playback
+                    // Audio trigger on correct pin entry
                     const audio = document.getElementById('hackerAudio');
                     if (audio) {
                         audio.play().catch(function(error) {
-                            console.log("Audio play blocked by browser policy: ", error);
+                            console.log("Autoplay blocked: ", error);
                         });
                     }
                 } else if (currentPin.length === 6) {
